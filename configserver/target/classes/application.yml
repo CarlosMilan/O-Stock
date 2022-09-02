@@ -1,0 +1,33 @@
+#Estas propiedades son para setear un repositorio de configuraciones en el File System
+#El perfil native es especifico de Spring Cloud e indica que se va a usar el sistema de archivos. Este perfil no
+# incluye configuraciones para repositorios en Git o Vault, lee directamente del filesystem
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    include: native
+    active:
+      - git
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/CarlosMilan/configurations.git
+          search-paths: licensing-service
+#Local configuration: Esta ubicacion puede ser en el classpath o file system
+#Leer el archivo de una ubicacion especifica. Si usamos classpath:/config, estaremos indicando que el archivo
+#esta en src/main/resources/config
+
+server:
+  port: 8071
+
+encrypt:
+  key: secretKey
+
+#Enable all Spring Boot Actuator endpoints.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
