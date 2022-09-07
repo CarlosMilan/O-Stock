@@ -18,7 +18,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class LicenseController {
 
     @Autowired
-    @Qualifier(value = "dummyLicenseService")
     private LicenseService licenseService;
 
     @GetMapping(value = "/{licenseId}")
