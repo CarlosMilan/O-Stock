@@ -1,0 +1,61 @@
+#Application
+spring:
+  application:
+    name: licensing-service
+  config:
+    import: configserver:http://localhost:8071
+  profiles:
+    active: dev
+
+#Actuator
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /
+  health:
+    db:
+      enabled: false
+    diskspace:
+      enabled: true
+
+#Circuit Breaker
+resilience4j.circuitbreaker:
+  instances:
+    licenseService:
+      registerHealthIndicator: true
+      ringBufferSizeInClosedState: 5
+      ringBufferSizeInHalfOpenState: 3
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 50
+      recordExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+        - java.util.concurrent.TimeoutException
+        - org.springframework.web.client.ResourceAccessException
+    organizationService:
+      registerHealthIndicator: true
+      ringBufferSizeInClosedState: 6
+      ringBufferSizeInHalfOpenState: 4
+      waitDurationInOpenState: 20s
+      failureRateThreshold: 60
+
+#spring.application.name=licensing-service
+#spring.profiles.active=dev
+#spring.config.import=configserver:http://localhost:8071
+##spring.cloud.config.uri=http://localhost:8071
+#
+##Actuator
+#management.endpoints.web.base-path=/
+#management.endpoints.enabled-by-default=false
+#management.endpoint.health.enabled=true
+#management.endpoint.health.show-details=always
+#management.health.db.enabled=false
+#management.health.diskspace.enabled=true
+
+
+
