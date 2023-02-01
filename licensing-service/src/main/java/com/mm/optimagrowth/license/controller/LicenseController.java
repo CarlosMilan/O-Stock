@@ -74,4 +74,10 @@ public class LicenseController {
         return new ResponseEntity<>(license, HttpStatus.OK);
 
     }
+
+    @GetMapping("/test/{id}")
+    public ResponseEntity<String> methodTest(@PathVariable String id) {
+        String value = "Se obtuvo el id: " + id;
+        return new ResponseEntity<>(value, HttpStatus.OK);
+    }
 }
