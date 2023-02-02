@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +29,8 @@ public class LicenseController {
     @Autowired
     private LicenseService licenseService;
 
+
+    @RolesAllowed({"ADMIN", "USER"})
     @GetMapping(value = "/")
     public ResponseEntity<List<License>> getLicenses(@PathVariable("organizationId") String organizationId) throws TimeoutException {
         logger.info("LicenseServiceController Correlation Id: {}", UserContextHolder.getContext().getCorrelationId());
@@ -36,6 +39,7 @@ public class LicenseController {
         return ResponseEntity.ok(licenses);
     }
 
+    @RolesAllowed({"ADMIN", "USER"})
     @GetMapping(value = "/{licenseId}")
     public ResponseEntity<License> getLicense(@PathVariable("organizationId") String organizationId, @PathVariable("licenseId") String licenseId) {
         License license = this.licenseService.getLicense(licenseId, organizationId);
@@ -48,22 +52,25 @@ public class LicenseController {
         return ResponseEntity.ok(license);
     }
 
+    @RolesAllowed({"ADMIN", "USER"})
     @PutMapping
     public ResponseEntity<License> updateLicense(@RequestBody License license) {
         return ResponseEntity.ok(this.licenseService.updateLicense(license));
     }
-
+    @RolesAllowed({"ADMIN", "USER"})
     @PostMapping
     public ResponseEntity<License> createLicense(@RequestBody License license) {
         return new ResponseEntity<>(this.licenseService.createLicense(license), HttpStatus.CREATED);
     }
 
+    @RolesAllowed({"ADMIN", "USER"})
     @DeleteMapping(value = "/{licenseId}")
     public ResponseEntity<String> deleteLicense(@PathVariable("licenseId") String licenseId) {
         String response = this.licenseService.deleteLicense(licenseId);
         return ResponseEntity.ok(response);
     }
 
+    @RolesAllowed({"ADMIN", "USER"})
     @RequestMapping(value = "/{licenseId}/{clientType}", method = RequestMethod.GET)
     public ResponseEntity<License> getLicenseWithClient(
             @PathVariable("organizationId") String organizationId,
@@ -75,6 +82,7 @@ public class LicenseController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @GetMapping("/test/{id}")
     public ResponseEntity<String> methodTest(@PathVariable String id) {
         String value = "Se obtuvo el id: " + id;
